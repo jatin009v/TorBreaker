@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}CyberSage | Scan{% endblock title %}
+{% block heading %}Scan Your Target{% endblock heading %}
+
+{% block body %}
+<div class="card mx-auto mt-5 p-4 shadow mb-2" style="max-width: 1000px; background-color: #1e2d46; border-color: #1e2d46;">
+    <form method="post" action="{% url 'scan' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <input type="text" class="form-control" id="url" name="domain" placeholder="URL" required>
+        </div>
+        <div class="form-group">
+            <label class="text-lg center text-white">Vulnerabilities:</label><br>
+            <div class="bg-secondary mb-1">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <label class="form-check-label mr-auto text-white" for="all">
+                            Select All
+                        </label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="all" name="all"
+                                onclick="toggleAll(this);">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% for pipeline in pipelines %}
+            <div class="bg-secondary mb-1">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <label class="form-check-label mr-auto text-white" for="{{ pipeline.id }}">
+                            {{ pipeline.name|upper }}
+                        </label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="{{ pipeline.id }}" name="pipelines"
+                                id="{{ pipeline.id }}">
+                            <label class="form-check-label" for="{{ pipeline.id }}"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn btn-primary d-block mx-auto" style="background-color: rgb(159, 239, 0); color: black; width:100%"">SUBMIT</button>
+    </form>
+    <!-- Bootstrap Icon Result -->
+    <div class="text-center mt-3">
+        <i class="bi bi-check-circle-fill text-success" style="font-size: 3rem;"></i>
+    </div>
+</div>
+<script>
+    function toggleAll(source) {
+        checkboxes = document.getElementsByName('pipelines');
+        for (var i = 0, n = checkboxes.length; i < n; i++) {
+            checkboxes[i].checked = source.checked;
+        }
+    }
+</script>
+{% endblock body %}

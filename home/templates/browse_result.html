@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Browse Results
+{% endblock %}
+
+{% block heading %}Browse Results{% endblock heading %}
+
+{% block body %}
+    <style>
+    .card{
+        background-color: #1e2d46;
+    }
+    .card-img-top {
+        transition: transform 0.3s ease;
+    }
+
+    .card:hover .card-img-top {
+        transform: scale(1.1);
+    }
+
+    .round {
+        border-top-left-radius: 50px;
+    }
+    </style>
+
+    <div id="content" class="round">
+        <div class="container-fluid">
+            <div class="row">
+                {% for website in results %}
+                <div class="col-md-4 mb-4" onclick="window.location.href='{% url 'result' website %}'">
+                    <div class="card">
+                        <img src="/static/img/folder.png" style="width: 50%; margin:auto; padding: 10px 0 2px 0"
+                            class="card-img-top" alt="{{ website }}">
+                        <div class="card-body">
+                            <h5 class="card-title text-white" style="margin: auto;text-align: center;">{{ website }}</h5>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock body %}

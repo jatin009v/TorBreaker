@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>{% block title %}Login{% endblock %}</title>
+  <!-- Custom fonts for this template-->
+  <link href="/static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+  <!-- Custom styles for this template-->
+  <link href="/static/css/sb-admin-2.min.css" rel="stylesheet">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .custom-navbar {
+      background-color: #4e73df;
+    }
+
+    .img-profile {
+      width: 30px;
+      /* Adjust the size as needed */
+      height: 30px;
+      /* Adjust the size as needed */
+    }
+
+    .btn-color {
+      background-color: #4e73df;
+      color: #fff;
+
+    }
+
+    .btn-color:hover {
+      color: #fff;
+      background-color: #3c65e1;
+    }
+
+    .profile-image-pic {
+      height: 200px;
+      width: 200px;
+      object-fit: cover;
+    }
+
+
+
+    .cardbody-color {
+      background-color: #9eb4f4;
+    }
+
+    a {
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+{% block styles %}
+
+{% endblock %}
+
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-light custom-navbar">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+      <div class="sidebar-brand-icon rotate-n-15">
+        <i class="fas fa-laugh-wink text-white"></i>
+      </div>
+      <div class="sidebar-brand-text mx-3 text-white">CyberSage</div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </nav>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <div class="card my-5">
+
+          <form class="card-body cardbody-color p-lg-5" method="post">
+            {% csrf_token %}
+            <div class="text-center">
+              <img src="/static/img/undraw_profile.svg"
+                class="img-fluid profile-image-pic img-thumbnail rounded-circle my-3" width="200px" alt="profile">
+            </div>
+
+            <div class="mb-3">
+              <input type="text" class="form-control" name="username" id="Username" aria-describedby="emailHelp"
+                placeholder="User Name">
+            </div>
+            <div class="mb-3">
+              <input type="password" class="form-control" name="password"  id="password" placeholder="password">
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-color px-5 mb-5 w-100">Login</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

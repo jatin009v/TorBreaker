@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}CyberSage | Progress{% endblock title %}
+
+{% block css %}
+<style>
+    svg {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+path {
+  stroke: cyan;
+  stroke-width: 6;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  stroke-dasharray: 193.904983521;
+  fill: none;
+  animation:
+    load 4s linear infinite,
+    color 3s linear infinite;
+}
+
+@keyframes load {
+  from { stroke-dashoffset: 775.6199340820312; }
+}
+
+@keyframes color {
+  33% { stroke: yellow; }
+  66% { stroke: magenta; }
+}
+.img-container{
+    margin: 0 0 0 25%;
+    height: 80%;
+}
+</style>
+{% endblock %}
+{% block body %}
+<div class="img-container">
+<img src="https://miro.medium.com/v2/resize:fit:960/0*DQYh0PS3yKT1Nwmi.gif" style="height: 350px;width: 450px;" alt="AI GIF">
+</div>
+<div class="container mt-3">
+    <div class="card rounded">
+        <div class="card-body">
+            <h1 class="mb-4 text-center text-dark">Please Wait . . .</h1>
+            <h1 class="mb-4 text-center text-dark">Code Fixer is fixing your code ^_^</h1>
+            <img scr="/static/img/AI.gif" />
+        </div>
+    </div>
+</div>
+<script>
+    // Define the interval timer
+    const intervalId = setInterval(() => {
+        fetch('/celery-progress/{{ task_id }}')
+            .then(response => response.json())
+            .then(data => {
+                if (data.complete === true) {
+                    clearInterval(intervalId); // Stop the timer
+                    alert("Code has been fixed! Please Review Github Pull Request");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }, 2000); // Interval in milliseconds (2000 milliseconds = 2 seconds)
+</script>
+{% endblock body %}

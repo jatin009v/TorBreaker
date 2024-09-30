@@ -1,0 +1,318 @@
+{% extends 'base.html' %}
+
+{% block title %}CyberSage | Result{% endblock title %}
+{% block heading %}Scanned Result{% endblock heading %}
+
+{% block body %}
+<div class="container mt-5" style="width: 110%;">
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card rounded">
+                <div class="card-body bg-primary">
+                    <h5 class="card-title" style="color: #1a2332;">Total</h5>
+                    <p class="card-text" style="color: #1a2332;">{{ scan_result.count }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card rounded">
+                <div class="card-body" style="background-color: rgb(217, 217, 0);">
+                    <h5 class="card-title" style="font-weight: bold;color: #1a2332;">Low Severity</h5>
+                    <p class="card-text" style="font-weight: bold;color: #1a2332;">{{ low_severity_count }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card rounded">
+                <div class="card-body bg-warning">
+                    <h5 class="card-title" style="font-weight: bold;color: #1a2332;">Medium Severity</h5>
+                    <p class="card-text" style="font-weight: bold;color: #1a2332;">{{ medium_severity_count }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card rounded">
+                <div class="card-body" style="background-color: rgb(253, 120, 71);">
+                    <h5 class="card-title" style="font-weight: bold;color: #1a2332;">High Severity</h5>
+                    <p class="card-text" style="font-weight: bold;color: #1a2332;">{{ high_severity_count }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card rounded">
+                <div class="card-body bg-danger">
+                    <h5 class="card-title" style="font-weight: bold;color: #1a2332;">Critical Severity</h5>
+                    <p class="card-text" style="font-weight: bold;color: #1a2332;">{{ critical_severity_count }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="code-fixer" class="card w-full text-center rounded d-flex justify-content-center align-items-center bg-primary mb-4"
+        style="height: 50px;">
+        <a href="/fix_code" style="font-size: larger;text-decoration: none;color: #1a2332;">Fix Vulnerabilities
+            Using Auto Code Fixer</a>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card rounded"style="background-color: #1e2d46;">
+                <div class="card-body">
+                    <h5 class="card-title text-white">Pie Chart</h5>
+                    <p class="card-text text-white">Pie chart showing vulnerability severity split</p>
+                    <canvas id="pieChart" width="200" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card rounded" style="background-color: #1e2d46;">
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col">
+                            <div class="card rounded bg-secondary" style="border-color:#1e2d46;">
+                                <div class="card-body ">
+                                    <h5 class="card-title text-white">Total URLs</h5>
+                                    <p class="card-text text-white">Total URLs: {{ scan_result.count }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card rounded bg-secondary" style="border-color:#1e2d46;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-white">Vulnerable URLs</h5>
+                                    <p class="card-text text-white">Vulnerable URLs: {{ vulnerable_urls_count }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card w-full text-center rounded d-flex justify-content-center align-items-center bg-primary"
+                        style="height: 50px;">
+                        <h3 class="text-center" style="font-size: larger;color: #1a2332;">Firewall Information</h3>
+                    </div>
+                    <p class="text-center mt-2 text-white">{{waf_info}}</p>
+                    <div class="card mb-4 w-full text-center rounded d-flex justify-content-center align-items-center bg-primary"
+                        style="height: 50px;">
+                        <h3 class="text-center" style="font-size: larger;color: #1a2332;">Technologies Used</h3>
+                    </div>
+                    <div class="row mb-4">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="text-white">Name</th>
+                                    <th class="text-white">Categories</th>
+                                    <th class="text-white">Version</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for tech,techdata in tech_list.items %}
+                                <tr>
+                                    <td class="text-white">{{ tech }}</td>
+                                    <td class="text-white">{{ techdata.categories }}</td>
+                                    <td class="text-white">{{ techdata.versions }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="mt-4 card rounded bg-gradient-primary   " >
+                <h5 class="mt-4 card-title text-center text-white">Web Vulnerability Results</h5>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-white">URL</th>
+                            <th class="text-white">Vulnerability Type</th>
+                            <th class="text-white">Severity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in scan_result %}
+                        <tr>
+                            <td id="url{{ forloop.counter }}"
+                                style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                <a href="#" onclick="copyToClipboard('url{{ forloop.counter }}')" style="text-decoration: none; color: white">{{ result.url }}</a>
+                            </td>
+                            <td class="text-white">{{ result.vulnerability_type }}</td>
+                            <td class="text-white">{{ result.severity|upper }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="mt-4 card rounded bg-gradient-primary   " >
+                <h5 class="mt-4 card-title text-center text-white">Network Vulnerability Results</h5>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-white">Software</th>
+                            <th class="text-white">CVE Number</th>
+                            <th class="text-white">Max CVSS</th>
+                            <th class="text-white">EPSS Score</th>
+                            <th class="text-white">Published</th>
+                            <th class="text-white">Updated</th>
+                            <th class="text-white">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for data_result in network_result %}
+                        <tr>
+                            <td class="text-white">{{ data_result.SoftwareName }}</td>
+                            <td id="url{{ forloop.counter }}"
+                                style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                <a href="#" onclick="copyToClipboard('url{{ forloop.counter }}')">{{ data_result.CVE }}</a>
+                            </td>
+                            <td class="text-white">{{ data_result.MaxCVSS }}</td>
+                            <td class="text-white">{{ data_result.EPSS_Score }}</td>
+                            <td class="text-white">{{ data_result.Published }}</td>
+                            <td class="text-white">{{ data_result.Updated }}</td>
+                            <td><button type="button" class="btn btn-primary bg-primary" style="color: #1a2332;" data-bs-toggle="modal"
+                                    data-bs-target="#descriptionModal{{ forloop.counter }}">Read
+                                    Description</button></td>
+                        </tr>
+                        <!-- Modal for Payload -->
+                        <div class="modal fade" id="descriptionModal{{ forloop.counter }}" tabindex="-1"
+                            aria-labelledby="descriptionModalLabel{{ forloop.counter }}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="descriptionModalLabel{{ forloop.counter }}">Description</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {{ data_result.Description }}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+<script>
+    function togglePrintView() {
+        var sidebar = document.querySelector('.sidebar');
+        var printButton = document.getElementById('printButton');
+
+
+        if (sidebar.style.display !== 'none') {
+            sidebar.style.display = 'none';
+            printButton.style.display = 'none';
+
+
+html2pdf().from(document.body).set({
+    filename: 'cybersage_scan_result.pdf',
+    image: { type: 'jpeg', quality: 1 },
+    html2canvas: { scale: 2, logging: true, dpi: 192, letterRendering: true },
+}).save();
+
+            
+            // Restore visibility after saving PDF
+            setTimeout(function() {
+                sidebar.style.display = '';
+                printButton.style.display = '';
+            }, 3000); // Adjust the delay as needed
+        }
+    }
+
+    document.getElementById('printButton').addEventListener('click', togglePrintView);
+</script>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+
+<script>
+    function copyToClipboard(elementId) {
+        var urlElement = document.getElementById(elementId);
+        var urlText = urlElement.innerText;
+
+        // Create a temporary input element
+        var tempInput = document.createElement("input");
+        tempInput.setAttribute("value", urlText);
+        document.body.appendChild(tempInput);
+
+        // Select and copy the text
+        tempInput.select();
+        document.execCommand("copy");
+
+        // Remove the temporary input
+        document.body.removeChild(tempInput);
+
+        // Inform the user
+        alert("URL copied to clipboard");
+    }
+</script>
+
+<script>
+    // Calculate the total count of vulnerabilities
+    var totalCount = {{ scan_result.count }};
+
+    // Calculate the percentage values for each severity level
+    var lowPercentage = ({{ low_severity_count }} / totalCount) * 100;
+    var mediumPercentage = ({{ medium_severity_count }} / totalCount) * 100;
+    var highPercentage = ({{ high_severity_count }} / totalCount) * 100;
+    var criticalPercentage = ({{ critical_severity_count }} / totalCount) * 100;
+
+    // Get the canvas element
+    var ctx = document.getElementById('pieChart').getContext('2d');
+
+    // Define data for the pie chart
+    var data = {
+        labels: ['Low', 'Medium', 'High', 'Critical'],
+        datasets: [{
+            label: 'Severity',
+            data: [lowPercentage, mediumPercentage, highPercentage, criticalPercentage],
+            backgroundColor: [
+                'rgba(217, 217, 0, 0.5)',
+                'rgba(255, 193, 7, 0.5)',
+                'rgba(253, 120, 71, 0.5)',
+                'rgba(255, 0, 0, 0.5)'
+            ],
+            borderColor: [
+                'rgba(217, 217, 0, 1)',
+                'rgba(255, 193, 7, 1)',
+                'rgba(253, 120, 71, 1)',
+                'rgba(255, 0, 0, 1)'
+            ],
+            borderWidth: 1
+        }]
+    };
+
+    // Create the pie chart
+    var myPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: data,
+        options: {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            return context.label + ': ' + context.formattedValue + '%';
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+{% endblock body %}
