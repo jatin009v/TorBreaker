@@ -59,8 +59,8 @@ GRANT ALL PRIVILEGES ON DATABASE cybersage_db TO cybersage_admin;
 
 ## Django creds
 - Username: admin
-- Email: singhpushpender6387@gmail.com
-- Password: Admin#@123
+- Email: jatingupta009v@gmail.com
+- Password: Admin@123
 
 ## Rules for Creating Vulnerability Scanning Pipelines
 - [X] Pipelines should contain linux commands
